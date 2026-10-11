@@ -1,7 +1,6 @@
 {
   "model": "sonnet",
   "advisorModel": "opus",
-  "effortLevel": "high",
   "permissions": {
     "ask": [
       "Bash(npx:*)",
