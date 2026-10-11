@@ -125,6 +125,17 @@ Result Storage (CSV/JSON in src/data/) → Optional Trade Execution
 - Use `pandas_ta` or `talib` for technical indicators instead
 - Sample data available at `/Users/md/Dropbox/dev/github/moon-dev-ai-agents-for-trading/src/data/rbi/BTC-USD-15m.csv`
 
+### Model Routing (cost/quality setup)
+Configured in `.claude/settings.json` and `.claude/agents/`, with no outside packages:
+- **Main session: Sonnet** (`model`) handles planning and writes the code
+- **Advisor: Opus** (`advisorModel`) is consulted automatically when Sonnet is stuck on a hard decision or bug
+- **Haiku subagents** handle cheap, high-volume work. Delegate to them instead of doing it in the main context:
+  - `scout`: find code, trace usages, summarize files
+  - `test-runner`: run backtests/checks and return only pass/fail + relevant errors
+  - `doc-writer`: docstrings and README updates for finished code
+- **`trade-safety-reviewer` (Opus)** must review any change to order execution, position sizing, risk limits, or key handling before commit
+- Keep the main context lean: delegate big searches and noisy command output to the Haiku subagents
+
 ### Download & Install Guardrails (owner rule — always applies)
 - **Don't download or run outside code without approval** - no `npx`, `curl`/`wget`, `git clone`, or new package installs unless the user explicitly says so
 - **Scan first** - before recommending or installing any package, script, template, or "one-command setup": check who publishes it, look at its source and install scripts, check its download count and age, and see what files or settings it changes. Report what you find before anything gets installed

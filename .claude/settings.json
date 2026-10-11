@@ -1,4 +1,6 @@
 {
+  "model": "sonnet",
+  "advisorModel": "opus",
   "permissions": {
     "ask": [
       "Bash(npx:*)",
@@ -12,7 +14,11 @@
       "Bash(pip install:*)",
       "Bash(pip3 install:*)",
       "Bash(conda install:*)",
-      "WebFetch"
+      "WebFetch",
+      "Bash(python src/main.py:*)",
+      "Bash(python3 src/main.py:*)",
+      "Bash(python src/ezbot.py:*)",
+      "Bash(python3 src/ezbot.py:*)"
     ],
     "deny": [
       "Bash(curl * | sh:*)",
