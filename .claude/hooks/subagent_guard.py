@@ -41,7 +41,7 @@ READ_ONLY_GIT = {"log", "diff", "show", "status", "blame", "grep", "ls-files", "
 
 # test-runner may run checks and the repo's own test/backtest scripts.
 # Known limit: any Python script can write files (backtests save results).
-TEST_SCRIPT_PATTERNS = ["src/agents/test_execution/*.py", "src/data/rbi/*/test_*.py"]
+TEST_SCRIPT_PATTERNS = ["src/agents/test_execution/*.py", "src/data/rbi/*/test_*.py", "src/scripts/stress_test.py"]
 
 CONTRACT = (
     "READ-ONLY MODE: you are a subagent. You may read, search, and run read-only commands. "
@@ -80,7 +80,7 @@ def bash_problem(cmd, agent_type):
         if agent_type == "test-runner" and name in ("python", "python3"):
             if words[1:3] == ["-m", "py_compile"]:
                 continue
-            if len(words) == 2 and any(fnmatch.fnmatch(words[1].lstrip("./"), p) for p in TEST_SCRIPT_PATTERNS):
+            if len(words) >= 2 and all(not w.startswith(("-c", "-m")) for w in words[1:2]) and any(fnmatch.fnmatch(words[1].lstrip("./"), p) for p in TEST_SCRIPT_PATTERNS):
                 continue
             return f"test-runner may only run py_compile or scripts matching {TEST_SCRIPT_PATTERNS}"
 

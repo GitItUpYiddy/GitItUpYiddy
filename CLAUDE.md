@@ -137,6 +137,19 @@ Configured in `.claude/settings.json` and `.claude/agents/`, with no outside pac
 - Keep the main context lean: delegate big searches and noisy command output to the Haiku subagents
 - **All subagents are read-only** (`.claude/hooks/subagent_guard.py`): they can only read, search, and run read-only commands; every file edit goes through the main agent. Denials and per-subagent tool counts are logged to `.claude/logs/subagents.jsonl` (gitignored). `test-runner` may also run `py_compile` and the repo's test/backtest scripts, which can write result files. `statusline-setup` is exempt
 
+### Advisor Checkpoints
+The advisor (Opus) is called by the model, not on a timer. Consult it at these moments:
+1. **Before committing to an approach** on any multi-file change or anything touching orders, sizing, or risk
+2. **When the same error or failing test happens twice**: stop retrying and ask whether it's the root cause or a rabbit hole
+3. **Before declaring a task done**: save/commit the work first, then ask what was missed
+
+### Strategy Gate (Research → Backtest → Incubate)
+No strategy goes live, even at tiny size, until `python src/scripts/stress_test.py` passes it:
+look-ahead check, out-of-sample after fees, ≥30 OOS trades, beats 95% of random entries, neighboring params hold up, and most timeframe/window slices are profitable.
+- Run `--selftest` after changing the gate: a gate that can't fail can't be trusted
+- Sample data is one asset (BTC) over ~11 bullish months. A PASS here is necessary, not sufficient; confirm on other assets/periods before incubating
+- Incubate passing strategies at the smallest live size and compare live results to the backtest before scaling
+
 ### Download & Install Guardrails (owner rule — always applies)
 - **Don't download or run outside code without approval** - no `npx`, `curl`/`wget`, `git clone`, or new package installs unless the user explicitly says so
 - **Scan first** - before recommending or installing any package, script, template, or "one-command setup": check who publishes it, look at its source and install scripts, check its download count and age, and see what files or settings it changes. Report what you find before anything gets installed
