@@ -125,6 +125,13 @@ Result Storage (CSV/JSON in src/data/) → Optional Trade Execution
 - Use `pandas_ta` or `talib` for technical indicators instead
 - Sample data available at `/Users/md/Dropbox/dev/github/moon-dev-ai-agents-for-trading/src/data/rbi/BTC-USD-15m.csv`
 
+### Download & Install Guardrails (owner rule — always applies)
+- **Don't download or run outside code without approval** - no `npx`, `curl`/`wget`, `git clone`, or new package installs unless the user explicitly says so
+- **Scan first** - before recommending or installing any package, script, template, or "one-command setup": check who publishes it, look at its source and install scripts, check its download count and age, and see what files or settings it changes. Report what you find before anything gets installed
+- **Never pipe downloads into a shell** (`curl ... | sh`)
+- **Prefer manual setup** over third-party installers when the change is small enough to do by hand
+- Enforced by `.claude/settings.json` (downloads/installs ask first; pipe-to-shell is denied)
+
 ### Code Style
 - **No fake/synthetic data** - always use real data or fail the script
 - **Minimal error handling** - user wants to see errors, not over-engineered try/except blocks

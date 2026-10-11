@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "ask": [
+      "Bash(npx:*)",
+      "Bash(bunx:*)",
+      "Bash(pnpm dlx:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)",
+      "Bash(git clone:*)",
+      "Bash(npm install:*)",
+      "Bash(npm i:*)",
+      "Bash(pip install:*)",
+      "Bash(pip3 install:*)",
+      "Bash(conda install:*)",
+      "WebFetch"
+    ],
+    "deny": [
+      "Bash(curl * | sh:*)",
+      "Bash(curl * | bash:*)",
+      "Bash(wget * | sh:*)",
+      "Bash(wget * | bash:*)"
+    ]
+  }
+}
