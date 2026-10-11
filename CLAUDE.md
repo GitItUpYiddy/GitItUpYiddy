@@ -141,7 +141,7 @@ Configured in `.claude/settings.json` and `.claude/agents/`, with no outside pac
 - **Scan first** - before recommending or installing any package, script, template, or "one-command setup": check who publishes it, look at its source and install scripts, check its download count and age, and see what files or settings it changes. Report what you find before anything gets installed
 - **Never pipe downloads into a shell** (`curl ... | sh`)
 - **Prefer manual setup** over third-party installers when the change is small enough to do by hand
-- Enforced by `.claude/settings.json` (downloads/installs ask first; pipe-to-shell is denied)
+- Backed by `.claude/settings.json`: downloads, installs, and launching any trading agent (`src/main.py`, `src/ezbot.py`, `src/agents/*`) require approval. The pipe-to-shell deny rules are extra protection that hasn't been tested
 
 ### Code Style
 - **No fake/synthetic data** - always use real data or fail the script

@@ -18,7 +18,15 @@
       "Bash(python src/main.py:*)",
       "Bash(python3 src/main.py:*)",
       "Bash(python src/ezbot.py:*)",
-      "Bash(python3 src/ezbot.py:*)"
+      "Bash(python3 src/ezbot.py:*)",
+      "Bash(python src/agents/*)",
+      "Bash(python ./src/agents/*)",
+      "Bash(python src/nice_funcs*)",
+      "Bash(python -m src.agents*)",
+      "Bash(python3 src/agents/*)",
+      "Bash(python3 ./src/agents/*)",
+      "Bash(python3 src/nice_funcs*)",
+      "Bash(python3 -m src.agents*)"
     ],
     "deny": [
       "Bash(curl * | sh:*)",
