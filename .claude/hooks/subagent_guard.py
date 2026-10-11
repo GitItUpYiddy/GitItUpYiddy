@@ -25,8 +25,12 @@ LOG_DIR = os.path.join(PROJECT, ".claude", "logs")
 WRITE_EXEMPT_AGENTS = {"statusline-setup"}
 
 # Tools a subagent may call. Anything not listed (Write, Edit, NotebookEdit,
-# every mcp__* tool, Artifact, etc.) is denied.
-ALLOWED_TOOLS = {"Read", "Grep", "Glob", "Bash", "WebSearch", "WebFetch", "ToolSearch", "Agent"}
+# every mcp__* tool, Artifact, etc.) is denied. SubagentHandback is how a
+# subagent returns its report; the Task*/TodoWrite tools only track progress.
+ALLOWED_TOOLS = {
+    "Read", "Grep", "Glob", "Bash", "WebSearch", "WebFetch", "ToolSearch", "Agent",
+    "SubagentHandback", "TodoWrite", "TaskCreate", "TaskUpdate", "TaskList", "TaskGet",
+}
 
 READ_ONLY_COMMANDS = {
     "ls", "cat", "head", "tail", "wc", "grep", "rg", "find", "sort", "uniq", "cut",
@@ -98,7 +102,10 @@ def bash_problem(cmd, agent_type):
         if name == "git":
             if any(a == "-c" or a.startswith("--output") or a.startswith("--exec") for a in args):
                 return "git -c/--output is not allowed"
-            sub = next((a for a in args if not a.startswith("-")), None)
+            rest = list(args)
+            while rest and rest[0] in ("-C", "--no-pager", "--git-dir", "--work-tree") or (rest and rest[0].startswith(("--git-dir=", "--work-tree="))):
+                rest = rest[2:] if rest[0] in ("-C", "--git-dir", "--work-tree") else rest[1:]
+            sub = rest[0] if rest else None
             if sub not in READ_ONLY_GIT:
                 return f"git {sub} is not read-only"
     return None
