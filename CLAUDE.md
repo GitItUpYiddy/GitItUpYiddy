@@ -132,9 +132,10 @@ Configured in `.claude/settings.json` and `.claude/agents/`, with no outside pac
 - **Haiku subagents** handle cheap, high-volume work. Delegate to them instead of doing it in the main context:
   - `scout`: find code, trace usages, summarize files
   - `test-runner`: run backtests/checks and return only pass/fail + relevant errors
-  - `doc-writer`: docstrings and README updates for finished code
+  - `doc-writer`: drafts docstrings and README text for finished code; the main agent applies it
 - **`trade-safety-reviewer` (Opus)** must review any change to order execution, position sizing, risk limits, or key handling before commit
 - Keep the main context lean: delegate big searches and noisy command output to the Haiku subagents
+- **All subagents are read-only** (`.claude/hooks/subagent_guard.py`): they can only read, search, and run read-only commands; every file edit goes through the main agent. Denials and per-subagent tool counts are logged to `.claude/logs/subagents.jsonl` (gitignored). `test-runner` may also run `py_compile` and the repo's test/backtest scripts, which can write result files. `statusline-setup` is exempt
 
 ### Download & Install Guardrails (owner rule — always applies)
 - **Don't download or run outside code without approval** - no `npx`, `curl`/`wget`, `git clone`, or new package installs unless the user explicitly says so
